@@ -1,0 +1,3 @@
+name,price,armor_pen_rate,power,max_sword_hp,equipped
+"Zirael", 50, 0.3, 40, 100, "False"
+"Snake school silver sword", 40, 0.2, 35, 95, "False"
