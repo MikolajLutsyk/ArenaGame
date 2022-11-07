@@ -11,4 +11,4 @@ Witcher sword
 True
 2
 30.0
-840
+100
