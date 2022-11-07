@@ -152,3 +152,6 @@ class Player:
                 else:
                     self.gold -= self.gold / 2
         print(goblin.__repr__())
+
+    def fight_giant(self):
+        print("Pizdilka")

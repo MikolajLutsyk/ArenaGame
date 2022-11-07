@@ -42,6 +42,10 @@ def game_process(player, shop):
                 player.fight_goblin()
                 player.save()
                 print(player.__repr__())
+            case 6:
+                player.fight_giant()
+                player.save()
+                print(player.__repr__())
 
         continue_game = int(input("\nDo you want to continue playing(1-yes, 2-no)? "))
         if continue_game != 1:
