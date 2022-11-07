@@ -110,8 +110,9 @@ class Player:
         goblin = Goblin(int(self.exp / 20))
         attacks_on_row_left = goblin.attacks_in_row
         first_to_attack = random.randint(1, 2)
+        continue_playing = 1
 
-        while self.akthp > 0 and goblin.hp > 0:
+        while continue_playing == 1:
             if first_to_attack % 2 == 1:
                 prev_hp = self.akthp
                 self.akthp = goblin.attack(self.akthp, attacks_on_row_left)
@@ -121,11 +122,11 @@ class Player:
                     attacks_on_row_left -= 1
                 print("\nGoblin attacked\n")
             else:
-                action = int(input(f"Enter your action: \n1. Use Potion({self.potions} left) \n2. "
+                action = int(input(f"\nEnter your action: \n1. Use Potion({self.potions} left) \n2. "
                                    f"Fix the sword({self.repair_kits} repair kits left) \n3. Attack"))
                 match action:
                     case 1:
-                        self.akthp += 10 + int((self.exp / 20) * 3)
+                        self.akthp += 15 + int((self.exp / 20) * 3)
                         self.potions -= 1
                     case 2:
                         self.use_repair_kit()
@@ -136,13 +137,18 @@ class Player:
             first_to_attack += 1
             print(f"Goblin hp: {goblin.hp} \n{self.name} hp: {self.akthp}")
             if goblin.hp <= 0:
-                print(f"{self.name} wins!")
-                self.exp += goblin.lvl * 20
+                print(f"\n{self.name} wins!\n")
+                if goblin.lvl == 0:
+                    self.exp += 15
+                else:
+                    self.exp += goblin.lvl * 20
+                continue_playing = 0
             elif self.akthp <= 0 or self.sword.sword_hp <= 0:
-                print("Goblin wins:(")
+                continue_playing = 0
+                print("\nGoblin wins:(\n")
                 self.akthp = self.maxhp
                 if self.gold - 20 < 0:
                     self.gold = 0
                 else:
-                    self.gold -= 20
+                    self.gold -= self.gold / 2
         print(goblin.__repr__())
