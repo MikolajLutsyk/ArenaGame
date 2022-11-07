@@ -118,7 +118,6 @@ class Player:
                 if prev_hp == self.akthp:
                     attacks_on_row_left = 4 + goblin.lvl
                 else:
-
                     attacks_on_row_left -= 1
                 print("\nGoblin attacked\n")
             else:
