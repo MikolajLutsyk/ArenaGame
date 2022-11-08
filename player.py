@@ -85,12 +85,16 @@ class Player:
                 print("Not enough gold!")
 
     def potion_buy(self):
-        count = int(input("\nHow many potions do you want to buy: "))
-        if self.gold - 5 * count >= 0:
-            self.gold -= 5 * count
-            self.potions += count
+        count = input("\nHow many potions do you want to buy(exit - main menu): ")
+        if count != "exit":
+            if self.gold - 5 * int(count) >= 0:
+                self.gold -= 5 * int(count)
+                self.potions += int(count)
+            elif self.gold - 5 * int(count) < 0:
+                print("\nNot enough gold!\n")
         else:
-            print("\nNot enough gold!\n")
+            print("returning to main menu")
+
 
     def buy_repair_kit(self):
         count = int(input("\nHow many repair kits do you want to buy: "))
@@ -109,11 +113,11 @@ class Player:
     def fight_goblin(self):
         goblin = Goblin(int(self.exp / 20))
         attacks_on_row_left = goblin.attacks_in_row
-        first_to_attack = random.randint(1, 2)
+        attack_order = random.randint(1, 2)
         continue_playing = 1
 
         while continue_playing == 1:
-            if first_to_attack % 2 == 1:
+            if attack_order % 2 == 1:
                 prev_hp = self.akthp
                 self.akthp = goblin.attack(self.akthp, attacks_on_row_left)
                 if prev_hp == self.akthp:
@@ -134,10 +138,11 @@ class Player:
                         goblin.hp -= self.sword.power / 2
                         self.sword.sword_hp -= 5
                         print(f"\n{self.name} attacked\n")
-            first_to_attack += 1
+            attack_order += 1
             print(f"Goblin hp: {goblin.hp} \n{self.name} hp: {self.akthp}")
             if goblin.hp <= 0:
                 print(f"\n{self.name} wins!\n")
+                self.gold += 20
                 if goblin.lvl == 0:
                     self.exp += 15
                 else:
