@@ -186,7 +186,7 @@ class Player:
 
         while continue_playing == 1:
             if attack_order % 2 == 1:
-                giant.attack(self.akthp, attacks_in_row_left, 20)
+                self.akthp = giant.attack(self.akthp, attacks_in_row_left, 20)
                 if cooldown_left > 0 and attacks_in_row_left == 0:
                     cooldown_left -= 1
                     if cooldown_left == 0:
@@ -211,6 +211,22 @@ class Player:
                         self.sword.sword_hp -= 7
                         print(f"\n{self.name} attacked\n")
             attack_order += 1
+            print(f"\nGiant hp: {giant.hp} \n{self.name} hp: {self.akthp}\n")
+            if giant.hp <= 0:
+                print(f"\n{self.name} wins!\n")
+                self.gold += 40
+                if giant.lvl == 0:
+                    self.exp += 15
+                else:
+                    self.exp += giant.lvl * 20
+                continue_playing = 0
+            elif self.akthp <= 0 or self.sword.sword_hp <= 0:
+                continue_playing = 0
+                print("\nGiant wins:(\n")
+                self.akthp = self.maxhp
+                if self.gold - 20 < 0:
+                    self.gold = 0
+                else:
+                    self.gold -= self.gold / 2
 
-
-        print("Pizdilka")
+        print(giant.__repr__())
