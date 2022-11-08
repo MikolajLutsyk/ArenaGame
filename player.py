@@ -62,30 +62,48 @@ class Player:
         player_save.writelines(save_text)
         self.__repr__()
 
-    def sleep(self):
-        if self.gold - 3 >= 0:
-            self.gold -= 3
-            self.hp = self.maxhp
-            print("You took a nap in a tavern")
-        else:
-            print("\nNot enough gold!\n")
+    def recovery(self):
+        option = int(input("Select recovery option: \n1 - sleep in a tavern "
+                           "\n2 - repair sword"
+                           "\n3 - return to main menu"
+                           "\nYour option: "))
+        match option:
+            case 1:
+                if self.gold - 10 >= 0:
+                    self.gold -= 10
+                    self.akthp = self.maxhp
+                    print("\nYou took a nap in a tavern\n")
+                else:
+                    print("\nNot enough gold!\n")
+            case 2:
+                if self.gold - 10 >= 0:
+                    self.gold -= 10
+                    self.sword.sword_hp = self.sword.max_sword_hp
+                else:
+                    print("\nNot enough gold!\n")
+            case 3:
+                print("\nreturning to main menu\n")
 
     def buy_sword(self, shop):
         print(shop.__repr__())
-        sword_num = int(input("Choose a sword: "))
-        if shop.swords[sword_num - 1].name == self.sword.name:
-            print("Already equipped, try again!")
-            self.buy_sword(shop)
-        else:
-            if self.gold - shop.swords[sword_num - 1].price >= 0:
-                self.sword = shop.swords[sword_num - 1]
-                self.sword.equipped = True
-                self.gold -= shop.swords[sword_num - 1].price
+        sword_num = input("Choose a sword(type 'exit' - return to main menu): ")
+        if sword_num != "exit":
+            if shop.swords[int(sword_num) - 1].name == self.sword.name:
+                print("Already equipped, try again!")
+                self.buy_sword(shop)
             else:
-                print("Not enough gold!")
+                if self.gold - shop.swords[int(sword_num) - 1].price >= 0:
+                    self.sword = shop.swords[int(sword_num) - 1]
+                    self.sword.equipped = True
+                    self.gold -= shop.swords[int(sword_num) - 1].price
+                else:
+                    print("\nNot enough gold!\n")
+        else:
+            print("\nreturing to main menu\n")
+
 
     def potion_buy(self):
-        count = input("\nHow many potions do you want to buy(exit - main menu): ")
+        count = input("\nHow many potions do you want to buy(type 'exit' - main menu): ")
         if count != "exit":
             if self.gold - 5 * int(count) >= 0:
                 self.gold -= 5 * int(count)
@@ -93,20 +111,20 @@ class Player:
             elif self.gold - 5 * int(count) < 0:
                 print("\nNot enough gold!\n")
         else:
-            print("returning to main menu")
-
+            print("\nreturning to main menu\n")
 
     def buy_repair_kit(self):
-        count = int(input("\nHow many repair kits do you want to buy: "))
-        if self.gold - 10 * count >= 0:
-            self.gold -= 10 * count
-            self.repair_kits += count
-        else:
-            print("\nNot enough gold!\n")
+        count = input("\nHow many repair kits do you want to buy: ")
+        if int(count) != "exit":
+            if self.gold - 10 * int(count) >= 0:
+                self.gold -= 10 * int(count)
+                self.repair_kits += int(count)
+            else:
+                print("\nNot enough gold!\n")
 
-    def use_repair_kit(self):
-        if self.sword.hp + 20 <= self.sword.max_sword_hp:
-            self.sword.hp += 20
+    def use_repair_kit(self, amount):
+        if self.sword.hp + amount <= self.sword.max_sword_hp:
+            self.sword.hp += amount
         else:
             print("\nSword is too good for a repair!\n")
 
@@ -127,13 +145,14 @@ class Player:
                 print("\nGoblin attacked\n")
             else:
                 action = int(input(f"\nEnter your action: \n1. Use Potion({self.potions} left) \n2. "
-                                   f"Fix the sword({self.repair_kits} repair kits left) \n3. Attack"))
+                                   f"Fix the sword({self.repair_kits} repair kits left) \n3. Attack"
+                                   f"\nYour option"))
                 match action:
                     case 1:
                         self.akthp += 15 + int((self.exp / 20) * 3)
                         self.potions -= 1
                     case 2:
-                        self.use_repair_kit()
+                        self.use_repair_kit(20)
                     case 3:
                         goblin.hp -= self.sword.power / 2
                         self.sword.sword_hp -= 5

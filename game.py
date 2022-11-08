@@ -23,7 +23,7 @@ def game_process(player, shop):
 
         match action:
             case 1:
-                player.sleep()
+                player.recovery()
                 player.save()
                 print(player.__repr__())
             case 2:
