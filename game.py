@@ -19,7 +19,7 @@ def game_process(player, shop):
         print(player.__repr__())
         action = int(input("\nWhat action do you want to do: \n1 - sleep(-5 gold, but restores hp) \n2 - "
                            "buy a new sword \n3 - buy a healing potion(-5 gold each)\n4 - buy sword repair "
-                           "kits(-10 gold each)\n5 - fight a goblin\nChoice: "))
+                           "kits(-10 gold each)\n5 - fight a goblin \n6 - fight a giant \nChoice: "))
 
         match action:
             case 1:

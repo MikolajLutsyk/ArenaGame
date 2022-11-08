@@ -2,6 +2,7 @@ import random
 
 from goblin import *
 from sword import *
+from giant import *
 
 
 class Player:
@@ -101,7 +102,6 @@ class Player:
         else:
             print("\nreturing to main menu\n")
 
-
     def potion_buy(self):
         count = input("\nHow many potions do you want to buy(type 'exit' - main menu): ")
         if count != "exit":
@@ -130,19 +130,19 @@ class Player:
 
     def fight_goblin(self):
         goblin = Goblin(int(self.exp / 20))
-        attacks_on_row_left = goblin.attacks_in_row
+        attacks_in_row_left = goblin.attacks_in_row
         attack_order = random.randint(1, 2)
         continue_playing = 1
 
         while continue_playing == 1:
             if attack_order % 2 == 1:
                 prev_hp = self.akthp
-                self.akthp = goblin.attack(self.akthp, attacks_on_row_left)
+                self.akthp = goblin.attack(self.akthp, attacks_in_row_left, 10)
+                goblin.hp += goblin.regeneration
                 if prev_hp == self.akthp:
-                    attacks_on_row_left = 4 + goblin.lvl
+                    attacks_in_row_left = 4 + goblin.lvl
                 else:
-                    attacks_on_row_left -= 1
-                print("\nGoblin attacked\n")
+                    attacks_in_row_left -= 1
             else:
                 action = int(input(f"\nEnter your action: \n1. Use Potion({self.potions} left) \n2. "
                                    f"Fix the sword({self.repair_kits} repair kits left) \n3. Attack"
@@ -158,7 +158,7 @@ class Player:
                         self.sword.sword_hp -= 5
                         print(f"\n{self.name} attacked\n")
             attack_order += 1
-            print(f"Goblin hp: {goblin.hp} \n{self.name} hp: {self.akthp}")
+            print(f"\nGoblin hp: {goblin.hp} \n{self.name} hp: {self.akthp}\n")
             if goblin.hp <= 0:
                 print(f"\n{self.name} wins!\n")
                 self.gold += 20
@@ -178,4 +178,39 @@ class Player:
         print(goblin.__repr__())
 
     def fight_giant(self):
+        giant = Giant(int(self.exp / 20))
+        attacks_in_row_left = giant.attacks_in_row
+        cooldown_left = 0
+        attack_order = random.randint(1, 2)
+        continue_playing = 1
+
+        while continue_playing == 1:
+            if attack_order % 2 == 1:
+                giant.attack(self.akthp, attacks_in_row_left, 20)
+                if cooldown_left > 0 and attacks_in_row_left == 0:
+                    cooldown_left -= 1
+                    if cooldown_left == 0:
+                        attacks_in_row_left = giant.attacks_in_row
+                elif cooldown_left == 0 and attacks_in_row_left > 0:
+                    attacks_in_row_left -= 1
+                    if attacks_in_row_left == 0:
+                        cooldown_left = giant.cooldown
+            else:
+                action = int(input(f"\nEnter your action: \n1. Use Potion({self.potions} left) \n2. "
+                                   f"Fix the sword({self.repair_kits} repair kits left) \n3. Attack"
+                                   f"\nYour option"))
+                match action:
+                    case 1:
+                        self.akthp += 15 + int((self.exp / 20) * 3)
+                        self.potions -= 1
+                    case 2:
+                        self.use_repair_kit(20)
+                    case 3:
+                        giant.hp -= (self.sword.power / 2) * (1 - self.sword.armor_pen_rate)
+                        giant.armor -= (self.sword.power / 2) * (1 - self.sword.armor_pen_rate)
+                        self.sword.sword_hp -= 7
+                        print(f"\n{self.name} attacked\n")
+            attack_order += 1
+
+
         print("Pizdilka")
