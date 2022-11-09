@@ -1,6 +1,6 @@
 Geralt
 100
-50
+25.0
 15
 0
 Witcher sword
@@ -11,4 +11,4 @@ Witcher sword
 True
 2
 100
-100
+23

@@ -183,10 +183,17 @@ class Player:
         cooldown_left = 0
         attack_order = random.randint(1, 2)
         continue_playing = 1
+        attack_count = 0
 
         while continue_playing == 1:
             if attack_order % 2 == 1:
-                self.akthp = giant.attack(self.akthp, attacks_in_row_left, 20)
+
+                if attack_count % 4 == 0 and attacks_in_row_left > 0:
+                    self.akthp = giant.attack(self.akthp, attacks_in_row_left, 30)
+                elif attack_count % 4 != 0 and attacks_in_row_left > 0:
+                    self.akthp = giant.attack(self.akthp, attacks_in_row_left, 20)
+                    attack_count += 1
+
                 if cooldown_left > 0 and attacks_in_row_left == 0:
                     cooldown_left -= 1
                     if cooldown_left == 0:
@@ -206,8 +213,11 @@ class Player:
                     case 2:
                         self.use_repair_kit(20)
                     case 3:
-                        giant.hp -= (self.sword.power / 2) * (1 - self.sword.armor_pen_rate)
-                        giant.armor -= (self.sword.power / 2) * (1 - self.sword.armor_pen_rate)
+                        if giant.armor > 0:
+                            giant.hp -= (self.sword.power / 2) * (1 - self.sword.armor_pen_rate)
+                            giant.armor -= (self.sword.power / 2) * (1 - self.sword.armor_pen_rate)
+                        else:
+                            giant.hp -= self.sword.power / 2
                         self.sword.sword_hp -= 7
                         print(f"\n{self.name} attacked\n")
             attack_order += 1
@@ -228,5 +238,4 @@ class Player:
                     self.gold = 0
                 else:
                     self.gold -= self.gold / 2
-
         print(giant.__repr__())
