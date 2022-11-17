@@ -27,7 +27,7 @@ class Player:
             lines[i] = lines[i].replace("\n", "")
         sword = Sword(lines[5], int(lines[6]), float(lines[7]), int(lines[8]), int(lines[9]), eval(lines[10]))
         sword.sword_hp = int(lines[13])
-        player = Player(lines[0], int(lines[1]), int(lines[2]), int(lines[3]), int(lines[4]), sword, int(lines[11]),
+        player = Player(lines[0], int(lines[1]), float(lines[2]), int(lines[3]), int(lines[4]), sword, int(lines[11]),
                         float(lines[12]))
         return player
 
@@ -239,3 +239,5 @@ class Player:
                 else:
                     self.gold -= self.gold / 2
         print(giant.__repr__())
+
+#comment
